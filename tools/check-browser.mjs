@@ -65,7 +65,9 @@ async function settle(page) {
 const frameOf = async (page, selector) => (await page.locator(selector).first().elementHandle()).contentFrame();
 
 for (const name of browsers) {
-  const browser = await playwright[name].launch();
+  // Behind a proxy (HTTPS_PROXY), a deployed copy is reached through it.
+  const proxy = process.env.SITE_URL && process.env.HTTPS_PROXY ? { proxy: { server: process.env.HTTPS_PROXY } } : {};
+  const browser = await playwright[name].launch(proxy);
   const tag = (text) => `[${name}] ${text}`;
 
   /* Every page, at every width, in both modes. */
