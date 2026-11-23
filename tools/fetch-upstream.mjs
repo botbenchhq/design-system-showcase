@@ -5,7 +5,7 @@
 // Usage: node tools/fetch-upstream.mjs
 //   DESIGN_SYSTEM_DIR=<checkout>  read the pinned commit from a local clone instead of the network.
 //
-// It stops when the commit cannot be fetched, when the tag no longer names the pinned commit (network fetch only),
+// It stops when the commit cannot be fetched, when the tag no longer names the pinned commit,
 // or when dist/VERSION is not the pinned version. Nothing is taken from a branch.
 
 import { execFileSync } from "node:child_process";
@@ -41,6 +41,19 @@ if (!have()) {
   const fetched = run("git", ["-C", checkout, "rev-parse", "FETCH_HEAD^{commit}"]).trim();
   if (fetched !== pin.commit) stop(`${source} gave ${fetched}, and upstream.json pins ${pin.commit}.`);
   run("git", ["-C", checkout, "checkout", "-q", "--detach", fetched]);
+}
+
+// A release tag can be moved. The commit is what is fetched; the tag is asked for only to notice that.
+if (!process.env.DESIGN_SYSTEM_DIR) {
+  let listed = "";
+  try {
+    listed = run("git", ["ls-remote", `${pin.repository}.git`, `refs/tags/${pin.tag}`, `refs/tags/${pin.tag}^{}`]);
+  } catch {
+    stop(`could not ask ${pin.repository} what ${pin.tag} names.`);
+  }
+  const named = listed.trim().split("\n").filter(Boolean).map((line) => line.split("\t")[0]);
+  if (named.length === 0) stop(`${pin.repository} has no tag ${pin.tag}.`);
+  if (named.at(-1) !== pin.commit) stop(`${pin.tag} now names ${named.at(-1)}, and upstream.json pins ${pin.commit}. A release tag was moved: look at it before changing the pin.`);
 }
 
 const version = readFileSync(join(checkout, "dist", "VERSION"), "utf8").trim();

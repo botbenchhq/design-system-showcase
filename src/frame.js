@@ -57,7 +57,7 @@
   }
 
   // The gallery's script reads ?theme and ?brand for a gallery example. A page without it is set here.
-  if ("standalone" in own) apply({ brand: params.get("brand") ?? "default", mode: params.get("theme") ?? "light" });
+  if ("standalone" in own) apply({ brand: /^[a-z][a-z0-9-]*$/.test(params.get("brand") ?? "") ? params.get("brand") : "default", mode: params.get("theme") ?? "light" });
 
   addEventListener("message", (event) => {
     if (event.source !== parent || typeof event.data !== "object" || event.data === null) return;

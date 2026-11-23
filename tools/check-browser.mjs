@@ -120,9 +120,11 @@ for (const name of browsers) {
     await page.getByRole("radio", { name: "Botbench" }).check();
     await page.getByRole("radio", { name: "Dark", exact: true }).check();
     await page.waitForTimeout(300);
+    expect((await page.evaluate(() => document.documentElement.dataset.theme)) === "dark", tag("the Mode control did not change the page's mode with the previews"));
     expect((await frame.evaluate(() => document.documentElement.dataset.theme)) === "dark" && (await frame.evaluate(() => document.querySelectorAll('link[href*="/themes/botbench.css"]').length)) === 1, tag("the previews did not take the Botbench theme in dark"));
     await page.getByRole("radio", { name: "Phone" }).check();
-    expect((await page.locator("iframe[data-frame]").first().getAttribute("width")) === "390", tag("the Phone width did not set the previews to 390px"));
+    const drawn = await page.locator("iframe[data-frame]").first().evaluate((element) => element.contentWindow.innerWidth);
+    expect(drawn === 390, tag(`the Phone width drew the previews ${drawn}px wide`));
     await page.getByRole("radio", { name: "Full" }).check();
 
     // The state filter.
@@ -177,7 +179,12 @@ for (const name of browsers) {
     // The home page's stage, and the rules page's two checks.
     const { page } = await open(context, "index.html");
     await page.getByRole("radio", { name: "Tool call" }).check();
-    expect((await page.locator(".sc-hero iframe").getAttribute("src")).includes("tool-call--"), tag("the stage did not change to the tool call"));
+    await page.waitForTimeout(500);
+    expect((await (await frameOf(page, ".sc-hero iframe")).evaluate(() => location.pathname)).includes("tool-call--"), tag("the stage did not change to the tool call"));
+    const before = page.url();
+    await page.goto(`${site}docs.html`);
+    await page.goBack();
+    expect(page.url() === before, tag("Back after changing the stage did not return to the home page"));
     await page.goto(`${site}rules.html`);
     await page.getByRole("radio", { name: "Three primary buttons" }).check();
     const panel = page.locator('[data-sc-panel="demo:two-primary"]');

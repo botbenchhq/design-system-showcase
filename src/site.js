@@ -25,10 +25,12 @@ const preview = {
   mode: root.dataset.scMode === "light" ? "light" : "dark",
 };
 
-function setPageMode(mode) {
-  root.dataset.theme = mode;
+function setPageMode(mode, { keep = true } = {}) {
+  if (keep) {
+    root.dataset.theme = mode;
+    store.set("showcase-mode", mode);
+  }
   root.dataset.scMode = mode;
-  store.set("showcase-mode", mode);
   for (const button of document.querySelectorAll("[data-sc-mode-toggle]")) button.setAttribute("aria-pressed", String(mode === "dark"));
   setPreview({ mode });
 }
@@ -67,11 +69,27 @@ function setPreview(change) {
   }
 }
 
+// Shows another example in a preview. The frame's address is replaced, not set, so that the
+// browser's Back button leaves the page and does not step back through the examples.
 function load(frame, path) {
   ready.delete(frame);
   frame.dataset.src = path;
-  frame.src = frameUrl(frame);
+  try {
+    frame.contentWindow.location.replace(frameUrl(frame));
+  } catch {
+    frame.src = frameUrl(frame);
+  }
 }
+
+// What a control shows is put back by the browser when the reader returns to a page.
+// Each control's effect is applied again then, so the page agrees with its controls.
+const restorers = [];
+addEventListener("pageshow", () => restorers.forEach((restore) => restore()));
+
+// With no mode chosen, the page follows the device, and so do the previews.
+matchMedia("(prefers-color-scheme: light)").addEventListener("change", (event) => {
+  if (root.dataset.theme === "auto") setPageMode(event.matches ? "light" : "dark", { keep: false });
+});
 
 const pending = new Map();
 addEventListener("message", (event) => {
@@ -89,37 +107,30 @@ addEventListener("message", (event) => {
   if (event.data.type === "sc-findings") pending.get(event.data.id)?.(event.data);
 });
 
-frames.forEach((frame) => {
-  frame.addEventListener("load", () => {
-    // A frame that navigated away from its preview is no longer one this page can talk to.
-    if (!frame.src.includes("/ds/frames/") && !frame.src.includes("/demos/")) ready.delete(frame);
-  });
-  paint(frame);
-});
+frames.forEach(paint);
 
 for (const input of document.querySelectorAll("input[data-sc-preview]")) {
   input.checked = preview[input.dataset.scPreview] === input.value;
   input.addEventListener("change", () => {
-    if (input.checked) setPreview({ [input.dataset.scPreview]: input.value });
+    if (!input.checked) return;
+    // The mode of the previews is the mode of the page: one choice, kept across pages.
+    if (input.dataset.scPreview === "mode") setPageMode(input.value);
+    else setPreview({ [input.dataset.scPreview]: input.value });
   });
 }
 
 // The width of the previews on a component page: a phone, a tablet, or the room there is.
-const WIDTHS = { phone: 390, tablet: 768 };
-for (const input of document.querySelectorAll("input[data-sc-size]")) {
-  input.addEventListener("change", () => {
-    if (!input.checked) return;
-    for (const frame of document.querySelectorAll("iframe[data-resizable]")) {
-      if (input.value in WIDTHS) {
-        frame.dataset.size = input.value;
-        frame.width = String(WIDTHS[input.value]);
-      } else {
-        delete frame.dataset.size;
-        frame.removeAttribute("width");
-      }
-    }
-  });
-}
+// The stylesheet holds the two widths; data-size chooses one.
+const sizes = [...document.querySelectorAll("input[data-sc-size]")];
+const applySize = () => {
+  const size = sizes.find((input) => input.checked)?.value ?? "full";
+  for (const frame of document.querySelectorAll("iframe[data-resizable]")) {
+    if (size === "full") delete frame.dataset.size;
+    else frame.dataset.size = size;
+  }
+};
+sizes.forEach((input) => input.addEventListener("change", applySize));
+if (sizes.length > 0) restorers.push(applySize);
 
 /* ---------- A choice that swaps what a preview shows ---------- */
 
@@ -128,8 +139,9 @@ for (const group of document.querySelectorAll("[data-sc-swap]")) {
   const apply = (input) => {
     for (const target of targets) {
       if (target instanceof HTMLIFrameElement) {
-        load(target, input.dataset.frame);
-        target.title = `Live preview: ${input.dataset.label}`;
+        if (target.dataset.src.endsWith(input.dataset.frame)) continue;
+        load(target, new URL(input.dataset.frame, location.href).href);
+        target.title = `Live preview: ${input.dataset.label}${target.dataset.look ? `, ${target.dataset.look}` : ""}`;
       } else if (target instanceof HTMLAnchorElement) {
         target.href = input.dataset.href;
         target.textContent = input.dataset.linkText;
@@ -142,6 +154,10 @@ for (const group of document.querySelectorAll("[data-sc-swap]")) {
     const input = event.target;
     if (input instanceof HTMLInputElement && input.checked) apply(input);
     if (input instanceof HTMLSelectElement) apply(input.selectedOptions[0]);
+  });
+  restorers.push(() => {
+    const chosen = group.querySelector("input:checked") ?? group.querySelector("select")?.selectedOptions[0] ?? (group instanceof HTMLSelectElement ? group.selectedOptions[0] : null);
+    if (chosen) apply(chosen);
   });
 }
 
@@ -156,8 +172,12 @@ for (const group of document.querySelectorAll("[data-sc-switch]")) {
   group.addEventListener("change", (event) => {
     if (event.target instanceof HTMLInputElement && event.target.checked) show(event.target.value);
   });
-  const checked = group.querySelector("input:checked");
-  if (checked) show(checked.value);
+  const restore = () => {
+    const checked = group.querySelector("input:checked");
+    if (checked) show(checked.value);
+  };
+  restore();
+  restorers.push(restore);
 }
 
 /* ---------- Copy buttons ---------- */
@@ -243,6 +263,7 @@ if (catalogue) {
     }
   });
   filter();
+  restorers.push(filter);
 }
 
 /* ---------- A component page: examples by state ---------- */
@@ -263,6 +284,7 @@ if (stateSelect) {
   };
   stateSelect.addEventListener("change", apply);
   apply();
+  restorers.push(apply);
 }
 
 /* ---------- The rendered check, run for real inside a preview ---------- */

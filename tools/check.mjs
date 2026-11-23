@@ -45,7 +45,7 @@ for (const page of pages) {
   const whole = readFileSync(page, "utf8");
   // A preview holds the gallery's example, whose links name the pages of an imagined app and go nowhere
   // (src/frame.js stops them). Only what the preview itself loads is checked.
-  const html = shown.startsWith(join("ds", "frames")) || shown.startsWith("demos") ? whole.slice(0, whole.indexOf("</head>")) : whole;
+  const html = shown.startsWith(join("ds", "frames")) || shown.startsWith(join("ds", "thumbs")) || shown.startsWith("demos") ? whole.slice(0, whole.indexOf("</head>")) : whole;
   const base = shown === "404.html" ? site : dirname(page);
   const targets = [
     ...[...html.matchAll(/\s(?:href|src|data-src)="([^"]*)"/g)].map((match) => match[1]),

@@ -65,7 +65,7 @@ src/demos/               the pages of the rule demonstration, each deliberately 
 
 **The checker's output is recorded, never imitated.** For each scenario in `src/demos/` the build runs the real checker and puts what it printed on the page. The build stops if the scenario that should pass fails, or one that should fail passes. The static scan needs Node, so it does not run in a visitor's browser, and the page says so. The rendered check, `check-dom.js`, does run in the browser, on the preview.
 
-**This site passes the checker it describes.** `npm run check:design` scans every page and stylesheet with the pinned checker, and the browser checks call `dsCheckDom()` on each page. CI fails on a finding.
+**This site passes the checker it describes.** `npm run check:design` scans every page and stylesheet with the pinned checker, and the browser checks call `dsCheckDom()` and axe on a page of each kind (ten pages, at three widths, in light and dark). CI fails on a finding.
 
 ### What stops the build
 
@@ -95,7 +95,7 @@ Every link between pages is relative, so the site works under any path. Only `40
 
 ## What it claims
 
-- Every figure on the pages (components, patterns, rules, tokens, examples) is counted from the pinned release.
+- Every count on the pages (components, patterns, rules, tokens, examples, don'ts) is counted from the pinned release.
 - Statements about status and testing repeat the design system's README: every component is draft, one app uses it, and nothing has been tried on a real iPhone or with a screen reader.
 - The site sets no cookies and counts no visits. It keeps the chosen mode and theme in the browser's local storage.
 

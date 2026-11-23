@@ -64,11 +64,12 @@
   font-weight: var(--ds-weight-normal);
 }
 
+/* Every link stays in view: the row wraps, and nothing scrolls out of sight. */
 .sc-header__nav {
   display: flex;
+  flex-wrap: wrap;
   order: 3;
   width: 100%;
-  overflow-x: auto;
   margin-inline: calc(var(--ds-space-sm) * -1);
 }
 
@@ -98,6 +99,7 @@
   display: flex;
   align-items: center;
   gap: var(--ds-space-xs);
+  margin-inline-start: auto;
 }
 
 .sc-header__wide {
@@ -105,19 +107,17 @@
 }
 
 @media (min-width: 768px) {
-  .sc-header__inner {
-    flex-wrap: nowrap;
-  }
-
   .sc-header__wide {
     display: inline-flex;
   }
 
+  /* Beside the brand when there is room for every link, and on its own row when there is not. */
   .sc-header__nav {
     order: 0;
     width: auto;
     margin-inline: 0;
-    flex: 1;
+    flex: 1 0 auto;
+    flex-wrap: nowrap;
   }
 }
 
@@ -331,11 +331,20 @@
   color-scheme: normal;
 }
 
+/* The widths the design system's own tests use for a phone, and its one breakpoint. */
 .sc-frame[data-size="phone"],
 .sc-frame[data-size="tablet"] {
   flex: none;
   max-width: none;
   border-inline: var(--ds-border-width) solid var(--ds-color-border);
+}
+
+.sc-frame[data-size="phone"] {
+  width: calc(390px + var(--ds-border-width) * 2);
+}
+
+.sc-frame[data-size="tablet"] {
+  width: calc(768px + var(--ds-border-width) * 2);
 }
 
 /* The catalogue: a list of live specimens */
@@ -426,19 +435,9 @@
   gap: var(--ds-space-md) var(--ds-space-xl);
 }
 
-.sc-controls--sticky {
-  padding-block: var(--ds-space-sm);
+.sc-controls--ruled {
+  padding-block-end: var(--ds-space-lg);
   border-bottom: var(--ds-border-width) solid var(--ds-color-border);
-  background-color: var(--ds-color-surface);
-}
-
-/* Under the header, which is one row from the breakpoint up. */
-@media (min-width: 768px) {
-  .sc-controls--sticky {
-    position: sticky;
-    inset-block-start: var(--ds-size-touch);
-    z-index: var(--ds-z-sticky);
-  }
 }
 
 .sc-controls__grow {

@@ -17,7 +17,7 @@ const NAV = [
   ["components.html", "Components"],
   ["patterns.html", "Patterns"],
   ["themes.html", "Themes"],
-  ["rules.html", "Rules and checker"],
+  ["rules.html", "Rules"],
   ["get-started.html", "Get started"],
   ["docs.html", "Docs"],
 ];
@@ -56,7 +56,7 @@ ${body}
 
   /** A live preview: one example of the design system's gallery, in its own document. */
   const frame = (path, title, options = {}) => {
-    const { height = 240, min = null, max = null, brand = null, mode = null, fit = false, fixed = false, resizable = false, id = null, swap = null, quiet = false, base = "ds/frames/" } = options;
+    const { height = 240, min = null, max = null, brand = null, mode = null, fit = false, fixed = false, resizable = false, id = null, swap = null, quiet = false, look = null, base = "ds/frames/" } = options;
     const attributes = [
       `class="sc-frame"`,
       "data-frame",
@@ -74,6 +74,7 @@ ${body}
       resizable ? "data-resizable" : "",
       swap ? `data-sc-swap-target="${swap}"` : "",
       // A thumbnail is a picture of the component: the link under it is the way in.
+      look ? `data-look="${h(look)}"` : "",
       quiet ? 'tabindex="-1" aria-hidden="true" inert' : "",
     ];
     return `<iframe ${attributes.filter(Boolean).join(" ")}></iframe>`;
@@ -169,7 +170,7 @@ ${body}
 }
 
 const noscript = (rel) =>
-  `<noscript><div class="ds-alert ds-alert--warning"><div class="ds-alert__content"><p class="ds-alert__label">Warning</p><p class="ds-alert__body">The live previews need JavaScript. <a href="${rel}ds/gallery/index.html">The design system's plain gallery</a> shows every example without it.</p></div></div></noscript>`;
+  `<noscript><div class="ds-alert ds-alert--warning"><div class="ds-alert__content"><p class="ds-alert__label">Warning</p><p class="ds-alert__body">The live previews, the search and the switches on this site need JavaScript. <a href="${rel}ds/gallery/index.html">The design system's plain gallery</a> shows every example without it.</p></div></div></noscript>`;
 
 const pageHead = ({ eyebrow, title, lead, extra = "" }) => `<section class="sc-section">
 <div class="sc-wrap sc-section__body">
@@ -182,6 +183,7 @@ const pageHead = ({ eyebrow, title, lead, extra = "" }) => `<section class="sc-s
 </section>`;
 
 const framePath = (item, example) => `${item.name}--${example.id}.html`;
+const thumbPath = (item) => `${item.name}.html`;
 const firstShown = (item) => item.galleryExamples.find((example) => example.verdict !== "dont") ?? item.galleryExamples[0];
 const detailHref = (item) => `${item.kind === "pattern" ? "patterns" : "components"}/${item.name}.html`;
 
@@ -235,7 +237,7 @@ ${k.segmented(
 )}
 ${k.brandControl("hero-brand")}
 </div>
-<div class="sc-stage__well">${k.frame(framePath(stage[0].item, stage[0].example), stage[0].item.title, { height: 420, fixed: true, swap: "hero" })}</div>
+<div class="sc-stage__well">${k.frame(framePath(stage[0].item, stage[0].example), stage[0].item.title, { height: 440, min: 360, max: 640, swap: "hero" })}</div>
 <p class="sc-stage__caption"><span data-sc-swap-target="hero">${h(stage[0].item.purpose)}</span> Live, from the design system's own gallery. Change the theme: the markup stays the same.</p>
 </div>
 </div>
@@ -319,7 +321,7 @@ ${
 <div class="sc-section__head">
 <p class="sc-type-eyebrow">Made for agent workflows</p>
 <h2 class="sc-type-heading">Components for the screens agent products need.</h2>
-<p class="sc-type-lead">Transcripts, tool calls, approvals, long runs and the decision at the end. These are not in a general-purpose library.</p>
+<p class="sc-type-lead">Transcripts, tool calls, approvals, long runs and the decision at the end: the screens this system was made for.</p>
 </div>
 <ul class="ds-list ds-list--dense">
 ${agent
@@ -364,7 +366,7 @@ function catalogueList(items, k, { rel = "" } = {}) {
       const example = firstShown(item);
       const text = [item.name, item.title, item.purpose, item.category, ...item.classes].join(" ").toLowerCase();
       return `<li class="sc-specimen" data-sc-item data-category="${h(item.category)}" data-text="${h(text)}">
-<div class="sc-specimen__preview">${k.frame(framePath(item, example), item.title, { height: 200, fit: true, fixed: true, quiet: true })}</div>
+<div class="sc-specimen__preview">${k.frame(thumbPath(item), item.title, { height: 200, fit: true, fixed: true, quiet: true, base: "ds/thumbs/" })}</div>
 <div class="sc-specimen__body">
 <a class="sc-specimen__name" href="${rel}${detailHref(item)}">${h(item.title)}</a>
 <p class="sc-specimen__purpose">${h(item.purpose)}</p>
@@ -511,7 +513,7 @@ ${k.outside(sourceUrl(`${folder}/meta.json`), "Guidance as data")}
 <section class="sc-section">
 <div class="sc-wrap sc-section__body">
 ${noscript(rel)}
-<div class="sc-controls sc-controls--sticky">
+<div class="sc-controls sc-controls--ruled">
 ${k.brandControl("preview-brand")}
 ${k.modeControl("preview-mode")}
 ${k.segmented("Width", "preview-size", [{ value: "phone", label: "Phone" }, { value: "tablet", label: "Tablet" }, { value: "full", label: "Full", checked: true }], "data-sc-size")}
@@ -609,19 +611,19 @@ ${k.arrow(detailHref(item), `Open ${item.title.toLowerCase()}`)}
 
 const GROUP_TITLES = {
   color: ["Colour", "Surfaces, text, borders and the tone of each status. A status always carries its icon and its word as well."],
-  font: ["Typefaces", "One for interface text and one for mono text."],
-  text: ["Type sizes", "Six sizes. A size outside this scale fails the check."],
+  font: ["Typefaces", "For interface text and for mono text."],
+  text: ["Type sizes", "A size outside this scale fails the check."],
   leading: ["Line heights", "One for each type size."],
-  weight: ["Weights", "Three."],
+  weight: ["Weights", "The weights of interface text."],
   space: ["Spacing", "Every margin, padding, gap and inset is one of these."],
-  radius: ["Radii", "Three corner radii."],
-  "border-width": ["Border", "One width."],
-  shadow: ["Shadow", "One, for overlays only: menus, popovers, dialogs and toasts."],
-  duration: ["Motion", "Three durations. Every transition stops when the reader asks for reduced motion."],
-  ease: ["Easing", "One curve."],
-  z: ["Layers", "Four layers, in order."],
-  size: ["Sizes", "The pointer target and the three column widths."],
-  breakpoint: ["Breakpoint", "One. The compact layout is styled first."],
+  radius: ["Radii", "The corner radii."],
+  "border-width": ["Border", "The width of every border."],
+  shadow: ["Shadow", "For overlays only: menus, popovers, dialogs and toasts."],
+  duration: ["Motion", "Every transition stops when the reader asks for reduced motion."],
+  ease: ["Easing", "The curve of every transition."],
+  z: ["Layers", "What sits above what, in order."],
+  size: ["Sizes", "The pointer target and the column widths."],
+  breakpoint: ["Breakpoint", "The compact layout is styled first."],
 };
 
 export function themes({ catalogue, tokens, theme }) {
@@ -702,7 +704,7 @@ ${cells
   .map(
     ([brand, mode, label]) => `<div class="sc-stage">
 <div class="sc-stage__bar"><h2 class="sc-type-subheading">${h(label)}</h2></div>
-<div class="sc-stage__well">${k.frame(framePath(specimens[0].item, specimens[0].example), `${specimens[0].item.title}, ${label}`, { height: 240, min: 120, max: 720, brand, mode, swap: "matrix" })}</div>
+<div class="sc-stage__well">${k.frame(framePath(specimens[0].item, specimens[0].example), `${specimens[0].item.title}, ${label}`, { height: 240, min: 120, max: 720, brand, mode, swap: "matrix", look: label })}</div>
 </div>`,
   )
   .join("\n")}
@@ -773,6 +775,7 @@ export function rulesPage({ rules, demos, catalogue, theme }) {
       if (example.verdict === "dont" && rule) donts.push({ item, example, rule });
     }
   }
+  const dontCount = [...catalogue.components, ...catalogue.patterns].reduce((sum, item) => sum + item.galleryExamples.filter((example) => example.verdict === "dont").length, 0);
   const body = `${pageHead({
     eyebrow: `Rules and checker · ${rules.count} rules · no setting turns one off`,
     title: "The part that keeps agent-built screens consistent.",
@@ -797,7 +800,7 @@ export function rulesPage({ rules, demos, catalogue, theme }) {
 <div class="ds-alert">
 <div class="ds-alert__content">
 <p class="ds-alert__label">What is real here</p>
-<p class="ds-alert__body">The static scan needs Node, so it does not run in your browser: its output below was recorded when this site was built, by running checker ${h(pin.version)} on exactly the source shown. The rendered check is the real <code>check-dom.js</code>, and the button runs it in your browser on the preview. Neither is imitated.</p>
+<p class="ds-alert__body">The static scan needs Node, so it does not run in your browser: its output below was recorded when this site was built, by running checker ${h(pin.version)} on the source shown (with the config file from Get started, where a scenario has a stylesheet of its own). The rendered check is the real <code>check-dom.js</code>, and the button runs it in your browser on the preview. Neither is imitated.</p>
 </div>
 </div>
 ${noscript("")}
@@ -846,8 +849,8 @@ ${k.code(demo.output, { caption: demo.command, label: "the output", copy: null, 
 <div class="sc-wrap sc-section__body">
 <div class="sc-section__head">
 <p class="sc-type-eyebrow">In the catalogue</p>
-<h2 class="sc-type-heading">Every don't names the rule that catches it.</h2>
-<p class="sc-type-lead">${donts.length} of the gallery's don'ts are tied to a checker rule. The design system's own tests run the checker over them and expect exactly that finding.</p>
+<h2 class="sc-type-heading">A don't names the rule that catches it.</h2>
+<p class="sc-type-lead">${donts.length} of the gallery's ${dontCount} don'ts name a checker rule. The rest are for a reviewer to catch, with the review rubric. These are the first of each rule.</p>
 </div>
 <ul class="ds-list ds-list--dense">
 ${donts
@@ -899,7 +902,7 @@ ${k.code(`import { readFileSync } from "node:fs";\nimport { expect, test } from 
 </div>
 </div>
 <div class="sc-prose">
-<p>This site is held to the same rules. Its CI syncs the pinned release, builds the pages, runs the static scan over every page and stylesheet it wrote, and runs <code>dsCheckDom()</code> and axe on each page in a browser. A finding fails the deployment.</p>
+<p>This site is held to the same rules. Its CI syncs the pinned release, builds the pages, runs the static scan over every page and stylesheet it wrote, and runs <code>dsCheckDom()</code> and axe in a browser on a page of each kind. A finding fails the deployment.</p>
 </div>
 <div class="ds-cluster">
 ${k.outside(`${SITE.repository}/blob/main/.github/workflows/pages.yml`, "This site's workflow")}

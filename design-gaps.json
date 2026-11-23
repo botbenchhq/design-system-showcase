@@ -2,10 +2,10 @@
   "gaps": [
     {
       "name": "Control row",
-      "reason": "No catalogue component lays out a search field and segmented controls in one wrapping row that can stick to the top.",
+      "reason": "No catalogue component lays out a search field and segmented controls in one wrapping row.",
       "classes": [
         "sc-controls",
-        "sc-controls--sticky",
+        "sc-controls--ruled",
         "sc-controls__grow"
       ],
       "files": [

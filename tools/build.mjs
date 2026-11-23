@@ -89,6 +89,14 @@ ${example.wrapper}
   }
 }
 
+// A catalogue thumbnail is a still picture of a component's first example, so it loads no behaviour module.
+const thumb = (item) => {
+  const example = item.galleryExamples.find((entry) => entry.verdict !== "dont") ?? item.galleryExamples[0];
+  const full = readFileSync(join(out, "ds", "frames", `${item.name}--${example.id}.html`), "utf8");
+  write(`ds/thumbs/${item.name}.html`, full.replace(/<script type="module" src="\.\.\/behaviors\/[^"]+"><\/script>\n/g, ""));
+};
+[...catalogue.components, ...catalogue.patterns].forEach(thumb);
+
 // 4. The rule scenarios: each is checked by the real checker now, and its output is put on the page.
 const scenarios = JSON.parse(readFileSync(join(root, "src", "demos", "scenarios.json"), "utf8"));
 const demos = scenarios.map((scenario) => {
@@ -154,7 +162,7 @@ ${written.map((path) => `<url><loc>${pages.SITE.url}${path === "index.html" ? ""
 </urlset>
 `,
 );
-write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /design-system-showcase/ds/frames/\nDisallow: /design-system-showcase/demos/\n\nSitemap: ${pages.SITE.url}sitemap.xml\n`);
+write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /design-system-showcase/ds/frames/\nDisallow: /design-system-showcase/ds/thumbs/\nDisallow: /design-system-showcase/demos/\n\nSitemap: ${pages.SITE.url}sitemap.xml\n`);
 write(".nojekyll", "");
 write("version.json", `${JSON.stringify({ designSystem: pin, pages: written.length, previews: frames }, null, 2)}\n`);
 
