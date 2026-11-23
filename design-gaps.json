@@ -1,0 +1,288 @@
+{
+  "gaps": [
+    {
+      "name": "Control row",
+      "reason": "No catalogue component lays out a search field and segmented controls in one wrapping row that can stick to the top.",
+      "classes": [
+        "sc-controls",
+        "sc-controls--sticky",
+        "sc-controls__grow"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Two unequal columns",
+      "reason": "The grid gives equal columns. Text beside a preview needs two columns of different widths that stack on a phone.",
+      "classes": [
+        "sc-duo",
+        "sc-duo--aside",
+        "sc-duo--even",
+        "sc-duo--reverse"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Example",
+      "reason": "One example on a component page: its title, a do or a don't with an icon and a word, its reason, the preview and the markup.",
+      "classes": [
+        "sc-example",
+        "sc-example--dont",
+        "sc-example__head",
+        "sc-example__icon",
+        "sc-example__reason",
+        "sc-example__title",
+        "sc-example__verdict",
+        "sc-example__verdict--do",
+        "sc-example__verdict--dont"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Site footer",
+      "reason": "The catalogue has no footer for a site.",
+      "classes": [
+        "sc-footer",
+        "sc-footer__about",
+        "sc-footer__col",
+        "sc-footer__cols",
+        "sc-footer__grid",
+        "sc-footer__title"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Preview frame",
+      "reason": "The inline frame that holds one gallery example in its own document, so its theme and width can change apart from the page.",
+      "classes": [
+        "sc-frame"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Site header",
+      "reason": "The app header is for an app with one title and a tray. A documentation site needs a brand mark and a row of links to its pages.",
+      "classes": [
+        "sc-header",
+        "sc-header__actions",
+        "sc-header__brand",
+        "sc-header__inner",
+        "sc-header__link",
+        "sc-header__mark",
+        "sc-header__mark-a",
+        "sc-header__mark-b",
+        "sc-header__nav",
+        "sc-header__sub",
+        "sc-header__wide"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Hero",
+      "reason": "No catalogue component lays a headline beside a live preview.",
+      "classes": [
+        "sc-hero",
+        "sc-hero__copy",
+        "sc-hero__stage"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Theme matrix",
+      "reason": "Four previews of one example, one for each theme and mode.",
+      "classes": [
+        "sc-matrix"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Checker output",
+      "reason": "The result of a check: a badge, the exit code and the printed output.",
+      "classes": [
+        "sc-output",
+        "sc-output__exit"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Point",
+      "reason": "One short point: a heading, a sentence and an optional link.",
+      "classes": [
+        "sc-point",
+        "sc-point__text"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Points",
+      "reason": "Short points under a rule, laid out by how many there are. The card is not used, so that a row of them is not a grid of identical cards.",
+      "classes": [
+        "sc-points",
+        "sc-points--three"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Running text",
+      "reason": "The catalogue has no component for paragraphs and lists of running text.",
+      "classes": [
+        "sc-prose"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Page section",
+      "reason": "The catalogue has no band that divides a long page into sections with a rule between them.",
+      "classes": [
+        "sc-section",
+        "sc-section--plain",
+        "sc-section__body",
+        "sc-section__head"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Skip link",
+      "reason": "The catalogue has no skip link. It is a button from the catalogue, placed off screen until it is focused.",
+      "classes": [
+        "sc-skip"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Specimen",
+      "reason": "One item of the specimen list: a live preview, the component name as a link, its purpose and its status.",
+      "classes": [
+        "sc-specimen",
+        "sc-specimen__body",
+        "sc-specimen__meta",
+        "sc-specimen__name",
+        "sc-specimen__preview",
+        "sc-specimen__purpose"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Specimen list",
+      "reason": "The catalogue is a list of uniform items, as the rules ask, but each item shows a live preview, which the list component has no slot for.",
+      "classes": [
+        "sc-specimens"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Preview stage",
+      "reason": "No catalogue component frames a live preview of another component with a bar above and a caption below.",
+      "classes": [
+        "sc-stage",
+        "sc-stage__bar",
+        "sc-stage__caption",
+        "sc-stage__well"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Step",
+      "reason": "One numbered step of the setup guide.",
+      "classes": [
+        "sc-step",
+        "sc-step__body",
+        "sc-step__title"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Numbered steps",
+      "reason": "The stepper shows progress through a form. The setup guide needs numbered steps that each hold text and code.",
+      "classes": [
+        "sc-steps"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Colour swatch",
+      "reason": "No catalogue component draws the value of a colour token. The swatch is an image of the value, with the value beside it as text.",
+      "classes": [
+        "sc-swatch",
+        "sc-swatch__fill"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Token value",
+      "reason": "A token value in mono type with its swatch.",
+      "classes": [
+        "sc-token-value"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Type roles",
+      "reason": "The catalogue sets type inside its components. A page of prose needs an eyebrow, a display line, a heading, a lead and a note, each on the type scale.",
+      "classes": [
+        "sc-type-display",
+        "sc-type-display__quiet",
+        "sc-type-eyebrow",
+        "sc-type-facts",
+        "sc-type-heading",
+        "sc-type-lead",
+        "sc-type-note",
+        "sc-type-subheading"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    },
+    {
+      "name": "Page column",
+      "reason": "The container is one reading column. A marketing page needs the wide column with page gutters.",
+      "classes": [
+        "sc-wrap"
+      ],
+      "files": [
+        "src/site.css"
+      ]
+    }
+  ]
+}

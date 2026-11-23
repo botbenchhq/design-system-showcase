@@ -1,0 +1,22 @@
+{
+  "paths": [
+    "src/site.css",
+    "src/site.js",
+    "src/theme.js",
+    "src/frame.css",
+    "src/frame.js",
+    "_site/index.html",
+    "_site/components.html",
+    "_site/patterns.html",
+    "_site/themes.html",
+    "_site/rules.html",
+    "_site/get-started.html",
+    "_site/docs.html",
+    "_site/404.html",
+    "_site/components",
+    "_site/patterns"
+  ],
+  "appPrefix": "sc",
+  "gaps": "design-gaps.json",
+  "vendorDir": "vendor/design-system"
+}

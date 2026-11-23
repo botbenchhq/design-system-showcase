@@ -1,0 +1,14 @@
+/*
+ * The page inside a live preview. The gallery's own stylesheet draws the example; this takes
+ * the gallery's border off, because the showcase page draws the frame around the preview.
+ * Unlayered, so it wins over the gallery's rules in the base layer. Tokens only.
+ */
+figure[data-gallery] {
+  border-width: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+
+html[data-sc-fit] figure[data-gallery] > [data-example] {
+  padding: var(--ds-space-lg);
+}
