@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Nothing here may write to the repository. The deploy job alone may publish to Pages.
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Fetch the pinned design system
+        run: node tools/fetch-upstream.mjs
+      - name: Build the site
+        run: node tools/build.mjs
+        env:
+          SITE_BASE: /design-system-showcase/
+      - name: Design system's static scan, over this site
+        run: npm run check:design
+      - name: Links, assets and previews
+        run: node tools/check.mjs
+      - name: Browser checks
+        run: |
+          npx playwright install --with-deps chromium
+          node tools/check-browser.mjs
+        env:
+          SHOTS: "0"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
