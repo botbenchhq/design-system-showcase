@@ -1,0 +1,21 @@
+{
+  "name": "design-system-showcase",
+  "private": true,
+  "type": "module",
+  "description": "The showcase site for the Botbench design system: static pages for GitHub Pages, built from a pinned release of the design system.",
+  "license": "Apache-2.0",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "upstream": "node tools/fetch-upstream.mjs",
+    "build": "node tools/build.mjs",
+    "check": "node tools/check.mjs",
+    "check:design": "node vendor/design-system/checker/check.mjs --config design-system.config.json",
+    "check:browser": "node tools/check-browser.mjs",
+    "serve": "node tools/serve.mjs",
+    "test": "npm run build && npm run check:design && npm run check"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.3",
+    "playwright": "1.63.0"
+  }
+}

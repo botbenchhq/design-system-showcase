@@ -1,0 +1,35 @@
+Botbench design system showcase
+Copyright 2026 Jon Lange
+
+Licensed under the Apache License, Version 2.0.
+
+Files copied from other projects (stored in this repository)
+-------------------------------------------------------------
+
+src/assets/favicon.svg is assets/svg/botbench-app-icon-two-tone-dark.svg from
+Botbench, https://github.com/botbenchhq/botbench, unchanged. The mark drawn in
+the site header (tools/pages.mjs) is the same two paths.
+
+  Botbench
+  Copyright 2026 Jon Lange
+  Licensed under the Apache License, Version 2.0.
+
+Fetched when the site is built (not stored in this repository)
+---------------------------------------------------------------
+
+The design system, https://github.com/botbenchhq/design-system, at the release
+named in upstream.json. tools/fetch-upstream.mjs fetches that commit and the
+design system's own sync script copies its dist/ folder, which the build
+publishes unchanged under ds/. That copy carries the design system's licence
+and its notice of the files it holds from other projects (IBM Plex Sans, IBM
+Plex Mono and Lucide icons): ds/LICENSE and ds/NOTICE on the published site.
+
+  Design system
+  Copyright 2026 Jon Lange
+  Licensed under the Apache License, Version 2.0.
+
+Development tools (not part of the published site)
+--------------------------------------------------
+
+Playwright (Apache License 2.0) and axe-core (Mozilla Public License 2.0) run
+the browser checks.
