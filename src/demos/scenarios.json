@@ -1,0 +1,9 @@
+[
+  { "id": "pass", "label": "Nothing: it passes", "title": "A page built from the vocabulary", "why": "A heading, a layout class and one primary button from the catalogue. Nothing here is styled by hand, so there is nothing to find." },
+  { "id": "gradient-emoji", "label": "A gradient and an emoji", "title": "Decorating a button by hand", "why": "The most recognised marks of a generated interface: an inline purple gradient and an emoji standing in for an icon." },
+  { "id": "raw-values", "label": "Hand-written CSS values", "title": "A stylesheet with its own colours and sizes", "why": "A colour, a padding, a radius, a shadow, a font and a type size, each a little off the scales. This is how screens drift apart a pixel at a time." },
+  { "id": "two-primary", "label": "Three primary buttons", "title": "Every action made the main one", "why": "Emphasis works only when one thing has it. A view has one primary action." },
+  { "id": "card-grid", "label": "Three identical cards", "title": "The feature-card template", "why": "A row of same-shaped cards is a template, not a design for the content. Uniform items belong in a list or a table." },
+  { "id": "invented-classes", "label": "Invented class names", "title": "Guessing a class, and reaching for utilities", "why": "A modifier the catalogue does not have, and colour, radius and shadow utilities on a screen. The finding suggests the nearest real class." },
+  { "id": "hidden-action", "label": "A hidden critical action", "title": "Delete, only inside a closed disclosure", "why": "An action marked critical must be reachable without opening anything. This one is found only by a reader who thinks to look." }
+]

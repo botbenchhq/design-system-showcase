@@ -1,0 +1,8 @@
+.app-invite {
+  padding: 18px;
+  border-radius: 10px;
+  background: #eef2ff;
+  box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+  font-family: Inter, sans-serif;
+  font-size: 15.5px;
+}
