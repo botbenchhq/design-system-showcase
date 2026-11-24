@@ -42,6 +42,12 @@ node tools/check-browser.mjs  # the pages and their interactions in a browser
 
 `BROWSERS=chromium,firefox,webkit node tools/check-browser.mjs` runs the browser checks in all three. Screenshots go to `shots/`, which is not committed.
 
+### Recorded screenshots
+
+The eight PNGs in `docs/screenshots/` and `src/assets/social-preview.png` are direct Chromium captures from [CI run 45407549029](https://github.com/botbenchhq/design-system-showcase/actions/runs/45407549029) on 24 November 2026. The run tested merge commit `e31ac7c589dbe9c7226423cf1aea9ff795ac5712`, from PR head `bca27e534e111df12dc05d88c215171dd1a5e059`, using the pinned design system 0.11.4. These files retain the captured pixels, including the approved two-tone header mark.
+
+CI runs `tools/social-preview.mjs` and the existing browser checks with `SHOTS=1`, then keeps these nine PNGs in a `showcase-captures-<commit>` artifact for seven days. To refresh the recorded views, copy the matching files from the artifact's `shots/` directory into `docs/screenshots/`, and copy its `src/assets/social-preview.png` to the same repository path. Update the capture source above when replacing them.
+
 ## How it is built
 
 ```
