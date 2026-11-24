@@ -63,6 +63,8 @@ src/demos/               the pages of the rule demonstration, each deliberately 
 
 **The shell and the catalogue are separate.** The pages' layout uses the design system's components and, for what a marketing page needs and the catalogue lacks, the classes in `src/site.css`, each declared in `design-gaps.json`. A new component upstream appears in the catalogue with no change here. A change to this site's layout cannot change how a component is drawn, because a preview loads none of the site's stylesheet.
 
+**The logo uses the product's approved artwork.** The light and dark marks in `src/assets/` are unchanged copies of [`botbench`'s two-tone Shared Seam SVGs](https://github.com/botbenchhq/botbench/tree/ff02c33ad152ddfe113236e87ee10449b793ea6f/assets/svg), following [the product's two-tone mark decision](https://github.com/botbenchhq/botbench/pull/230). The header selects the asset for the page's mode, including automatic device changes. Brand cyan stays inside those assets; no status token is repurposed and the vendored design system stays unchanged.
+
 **The checker's output is recorded, never imitated.** For each scenario in `src/demos/` the build runs the real checker and puts what it printed on the page. The build stops if the scenario that should pass fails, or one that should fail passes. The static scan needs Node, so it does not run in a visitor's browser, and the page says so. The rendered check, `check-dom.js`, does run in the browser, on the preview.
 
 **This site passes the checker it describes.** `npm run check:design` scans every page and stylesheet with the pinned checker, and the browser checks call `dsCheckDom()` and axe on a page of each kind (ten pages, at three widths, in light and dark). CI fails on a finding.

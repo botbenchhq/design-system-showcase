@@ -78,8 +78,8 @@
         "sc-header__inner",
         "sc-header__link",
         "sc-header__mark",
-        "sc-header__mark-a",
-        "sc-header__mark-b",
+        "sc-header__mark--light",
+        "sc-header__mark--dark",
         "sc-header__nav",
         "sc-header__sub",
         "sc-header__wide"
