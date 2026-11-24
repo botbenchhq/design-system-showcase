@@ -28,7 +28,25 @@ jobs:
       - name: Browser checks in Chromium, Firefox and WebKit
         run: |
           npx playwright install --with-deps chromium firefox webkit
+          node tools/social-preview.mjs
           node tools/check-browser.mjs
         env:
           BROWSERS: chromium,firefox,webkit
-          SHOTS: "0"
+          SHOTS: "1"
+      - name: Keep reproducible showcase captures
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: showcase-captures-${{ github.sha }}
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            src/assets/social-preview.png
+            shots/components-1280-dark.png
+            shots/components-approval-390-light.png
+            shots/get-started-390-dark.png
+            shots/index-1280-dark.png
+            shots/index-1280-light.png
+            shots/index-390-dark.png
+            shots/rules-1280-light.png
+            shots/themes-1280-dark.png
