@@ -51,12 +51,28 @@
   height: var(--ds-space-xl);
 }
 
-.sc-header__mark-a {
-  fill: var(--ds-color-on-surface);
+/* The logo is approved artwork, separate from the design system's status colours.
+ * Match its light/dark asset to the page, including automatic device changes. */
+.sc-header__mark--light {
+  display: none;
 }
 
-.sc-header__mark-b {
-  fill: var(--ds-color-muted);
+:root[data-theme="light"] .sc-header__mark--light {
+  display: block;
+}
+
+:root[data-theme="light"] .sc-header__mark--dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] .sc-header__mark--light {
+    display: block;
+  }
+
+  :root[data-theme="auto"] .sc-header__mark--dark {
+    display: none;
+  }
 }
 
 .sc-header__sub {
