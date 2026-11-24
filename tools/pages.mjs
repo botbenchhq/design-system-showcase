@@ -112,7 +112,6 @@ export function layout({ rel = "", path, title, description, current = null, bod
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="${rel}assets/theme.js"></script>
 <title>${h(fullTitle)}</title>
 <meta name="description" content="${h(description)}">${noindex ? '\n<meta name="robots" content="noindex">' : `\n<link rel="canonical" href="${canonical}">`}
 <meta property="og:type" content="website">
@@ -131,6 +130,7 @@ export function layout({ rel = "", path, title, description, current = null, bod
 <link rel="stylesheet" href="${rel}ds/design-system.css">
 <link rel="stylesheet" href="${rel}ds/themes/${theme.name}.css">
 <link rel="stylesheet" href="${rel}assets/site.css">
+<script src="${rel}assets/theme.js"></script>
 <script type="module" src="${rel}assets/site.js"></script>
 </head>
 <body>
