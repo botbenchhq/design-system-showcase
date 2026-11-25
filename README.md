@@ -42,6 +42,12 @@ node tools/check-browser.mjs  # the pages and their interactions in a browser
 
 `BROWSERS=chromium,firefox,webkit node tools/check-browser.mjs` runs the browser checks in all three. Screenshots go to `shots/`, which is not committed.
 
+### Recorded screenshots
+
+The eight PNGs in `docs/screenshots/` and `src/assets/social-preview.png` are direct Chromium captures from [CI run 45407549029](https://github.com/botbenchhq/design-system-showcase/actions/runs/45407549029) on 24 November 2026. The run tested merge commit `e31ac7c589dbe9c7226423cf1aea9ff795ac5712`, from PR head `bca27e534e111df12dc05d88c215171dd1a5e059`, using the pinned design system 0.11.4. These files retain the captured pixels, including the approved two-tone header mark.
+
+CI runs `tools/social-preview.mjs` and the existing browser checks with `SHOTS=1`, then keeps these nine PNGs in a `showcase-captures-<commit>` artifact for seven days. To refresh the recorded views, copy the matching files from the artifact's `shots/` directory into `docs/screenshots/`, and copy its `src/assets/social-preview.png` to the same repository path. Update the capture source above when replacing them.
+
 ## How it is built
 
 ```
@@ -62,6 +68,8 @@ src/demos/               the pages of the rule demonstration, each deliberately 
 **Previews are the gallery's own examples.** For each example in `ds/gallery/<component>.html` the build writes one small document, `ds/frames/<component>--<example>.html`, holding that example's element exactly as the gallery has it, with the design system's stylesheet, the gallery's script and the behaviour modules. A page shows it in an inline frame, which is what lets one page show an example under another theme, mode or width. No example markup is written in this repository.
 
 **The shell and the catalogue are separate.** The pages' layout uses the design system's components and, for what a marketing page needs and the catalogue lacks, the classes in `src/site.css`, each declared in `design-gaps.json`. A new component upstream appears in the catalogue with no change here. A change to this site's layout cannot change how a component is drawn, because a preview loads none of the site's stylesheet.
+
+**The logo uses the product's approved artwork.** The light and dark marks in `src/assets/` are unchanged copies of [`botbench`'s two-tone Shared Seam SVGs](https://github.com/botbenchhq/botbench/tree/ff02c33ad152ddfe113236e87ee10449b793ea6f/assets/svg), following [the product's two-tone mark decision](https://github.com/botbenchhq/botbench/pull/230). The header selects the asset for the page's mode, including automatic device changes. Brand cyan stays inside those assets; no status token is repurposed and the vendored design system stays unchanged.
 
 **The checker's output is recorded, never imitated.** For each scenario in `src/demos/` the build runs the real checker and puts what it printed on the page. The build stops if the scenario that should pass fails, or one that should fail passes. The static scan needs Node, so it does not run in a visitor's browser, and the page says so. The rendered check, `check-dom.js`, does run in the browser, on the preview.
 

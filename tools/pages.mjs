@@ -100,7 +100,7 @@ ${options
   return { icon, arrow, outside, code, frame, segmented, brandControl, modeControl };
 }
 
-const MARK = `<svg class="sc-header__mark" viewBox="3 3 18 18" aria-hidden="true"><path class="sc-header__mark-a" d="M13 4H6A2 2 0 0 0 4 6V17A2 2 0 0 0 6 19H8V9H13Z"/><path class="sc-header__mark-b" d="M11 20H18A2 2 0 0 0 20 18V7A2 2 0 0 0 18 5H16V15H11Z"/></svg>`;
+const mark = (rel) => `<img class="sc-header__mark sc-header__mark--light" src="${rel}assets/botbench-mark-two-tone-light.svg" width="18" height="18" alt="" aria-hidden="true"><img class="sc-header__mark sc-header__mark--dark" src="${rel}assets/botbench-mark-two-tone-dark.svg" width="18" height="18" alt="" aria-hidden="true">`;
 
 /** The document around a page's content. */
 export function layout({ rel = "", path, title, description, current = null, body, theme, noindex = false }) {
@@ -137,7 +137,7 @@ export function layout({ rel = "", path, title, description, current = null, bod
 <a class="ds-button ds-button--small sc-skip" href="#main">Skip to the page</a>
 <header class="sc-header">
 <div class="sc-wrap sc-header__inner">
-<a class="sc-header__brand" href="${rel}index.html" aria-label="Botbench design system, home">${MARK}<span>Botbench <span class="sc-header__sub">Design system</span></span></a>
+<a class="sc-header__brand" href="${rel}index.html" aria-label="Botbench design system, home">${mark(rel)}<span>Botbench <span class="sc-header__sub">Design system</span></span></a>
 <nav class="sc-header__nav" aria-label="Pages">
 ${NAV.map(([href, text]) => `<a class="sc-header__link" href="${rel}${href}"${current === href ? ' aria-current="page"' : ""}>${h(text)}</a>`).join("\n")}
 </nav>

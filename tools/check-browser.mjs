@@ -83,8 +83,27 @@ for (const name of browsers) {
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
         expect(overflow <= 1, `${where}: the page scrolls sideways by ${overflow}px`);
         await page.evaluate(axeSource);
-        const violations = await page.evaluate(() => axe.run(document, { iframes: false, resultTypes: ["violations"] }).then((result) => result.violations.map((violation) => `${violation.id} (${violation.nodes.length}: ${violation.nodes[0].target.join(" ")})`)));
+        const violations = await page.evaluate(() => axe.run(document, { iframes: false, resultTypes: ["violations"] }).then((result) => result.violations.map((violation) => `${violation.id} (${violation.nodes.length}: ${violation.nodes[0].target.join(" ")}; ${violation.nodes[0].failureSummary})`)));
         expect(violations.length === 0, `${where}: axe: ${violations.join(", ")}`);
+        if (violations.length > 0) {
+          // Preserve the failing paint's evidence without changing or retrying the accessibility check.
+          const paint = await page.evaluate(() => {
+            const root = document.documentElement;
+            const style = (element) => {
+              const computed = getComputedStyle(element);
+              return { color: computed.color, background: computed.backgroundColor, textFill: computed.getPropertyValue("-webkit-text-fill-color"), colorScheme: computed.colorScheme };
+            };
+            return {
+              theme: root.dataset.theme,
+              mode: root.dataset.scMode,
+              scroll: { x: scrollX, y: scrollY, width: root.scrollWidth, height: root.scrollHeight },
+              root: style(root),
+              body: style(document.body),
+              breadcrumbs: [...document.querySelectorAll(".ds-breadcrumb__link")].map((element) => ({ text: element.textContent, ...style(element) })),
+            };
+          });
+          console.error(`${where}: accessibility paint evidence: ${JSON.stringify(paint)}`);
+        }
         await page.evaluate(checkDom);
         const findings = await page.evaluate(() => dsCheckDom(document.documentElement, { appPrefix: "sc" }).map((finding) => `${finding.rule}: ${finding.snippet}`));
         expect(findings.length === 0, `${where}: design rules: ${findings.slice(0, 3).join(" | ")}`);
